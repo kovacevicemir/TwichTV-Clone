@@ -1,0 +1,13 @@
+1. npm install --save redux react-redux
+2. create folders: actions / index.js and reducers / index.js
+3. inside reducers/index.js export default ({ dummy...})
+4. src/index.js -> import Provider and CreateStore, and reducers
+5. const store = createStore...
+6. Wrap <App /> component in render method with <Provider> and pass store = {store}
+7. add action creators in actions / index.js export const... return type:'SIGN_IN'...
+8. hook-up connect, and actions on bottom of component...
+9. now you can call actions with this.props and actions that u hooked on bottom..
+10. create new Reducer, (state, action) and than switch in case of 'TYPE' return...
+note: state needs to have some initial value: [], {} etc... and state cannot be 
+modified in ordinary way... we have to use ...state (spread syntax..)
+11. add new reducer to combineReducers

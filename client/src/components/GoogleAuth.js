@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { signIn, signOut } from '../actions'
 
 class GoogleAuth extends Component {
-    state = { isSignedIn: null }
 
     componentDidMount(){
         window.gapi.load('client:auth2', () => {
@@ -10,14 +11,20 @@ class GoogleAuth extends Component {
                 scope: 'email'
             }).then(() => {
                 this.auth = window.gapi.auth2.getAuthInstance();
-                this.setState ({ isSignedIn: this.auth.isSignedIn.get() })
+
+                this.onAuthChange(this.auth.isSignedIn.get())
                 this.auth.isSignedIn.listen(this.onAuthChange)
             })
         })
     }
 
-    onAuthChange = () =>{
-        this.setState({isSignedIn : this.auth.isSignedIn.get()})
+    //basically lisener callback
+    onAuthChange = (isSignedIn) =>{
+        if(isSignedIn){
+            this.props.signIn()
+        }else{
+            this.props.signOut()
+        }
     }
     
     SignInOrOut = (e) =>{
@@ -29,10 +36,10 @@ class GoogleAuth extends Component {
     }
 
     renderAuthButton(){
-        if(this.state.isSignedIn === null){
+        if(this.props.isSignedIn === null){
             return 
             
-        }else if(this.state.isSignedIn === true){
+        }else if(this.props.isSignedIn === true){
             return (
                 <button onClick={this.SignInOrOut} value='sign-out' className="ui red google button">
                     <i className="google icon"></i>
@@ -59,4 +66,14 @@ class GoogleAuth extends Component {
     }
 }
 
-export default GoogleAuth
+//state is whole redux store state
+//so state.auth -> auth is reducers/index.js
+//isSignedIn is reducers/authReducer that holds actual state (true or false in this case)
+const mapStateToProps = (state) =>{
+    return {isSignedIn : state.auth.isSignedIn}
+}
+
+export default connect(
+    mapStateToProps,
+    { signIn, signOut}
+)(GoogleAuth)
