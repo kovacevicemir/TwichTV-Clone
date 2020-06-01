@@ -11,7 +11,6 @@ class GoogleAuth extends Component {
                 scope: 'email'
             }).then(() => {
                 this.auth = window.gapi.auth2.getAuthInstance();
-
                 this.onAuthChange(this.auth.isSignedIn.get())
                 this.auth.isSignedIn.listen(this.onAuthChange)
             })
@@ -21,7 +20,7 @@ class GoogleAuth extends Component {
     //basically lisener callback
     onAuthChange = (isSignedIn) =>{
         if(isSignedIn){
-            this.props.signIn()
+            this.props.signIn(this.auth.currentUser.get().getId())
         }else{
             this.props.signOut()
         }
@@ -72,6 +71,7 @@ class GoogleAuth extends Component {
 const mapStateToProps = (state) =>{
     return {isSignedIn : state.auth.isSignedIn}
 }
+
 
 export default connect(
     mapStateToProps,
