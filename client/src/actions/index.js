@@ -1,4 +1,5 @@
 import streams from '../apis/streams'
+import history from '../history'
 import {
     SIGN_IN,
     SIGN_OUT,
@@ -23,10 +24,14 @@ export const signOut = () =>{
 }
 
 //CreateStream is actionCreator, dispatch-> is action, dispatching action
-export const createStream = formValues => async dispatch => {
-    const response = await streams.post('/streams', formValues)
+export const createStream = formValues => async (dispatch, getState) => {
+    const {userId} = getState().auth
+    const response = await streams.post('/streams', {...formValues, userId })
 
     dispatch({ type:CREATE_STREAM, payload:response.data })
+    //Do some programmatic navigation -> back to homepage after dispatch
+    history.push('/')
+
 }
 
 export const fetchStreams  = () => async dispatch =>{
