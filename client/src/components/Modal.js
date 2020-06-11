@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import history from '../history'
 
 //REACT PORTAL
 //-> render from StreamDelete but under body element inside #modal div
@@ -15,16 +14,15 @@ const Modal = props => {
     //1st arg something to display, 2nd refference to element to render into
     return ReactDOM.createPortal(
         
-        <div onClick={() => history.push('/')} className="ui dimmer modals visible active">
-            
+        <div onClick={props.onDismiss} className="ui dimmer modals visible active">
+
             <div onClick={(e) => e.stopPropagation()} className="ui standard modal visible active">
-                <div className="header">Delete Stream </div>
+                <div className="header">{props.title} </div>
                 <div className="content">
-                    Are you sure you want to delete this stream ?
+                    {props.content}
                 </div>
                 <div className="actions">
-                    <button className="ui primary button">Delete</button>
-                    <button className="ui button">Cancel</button>
+                    {props.actions}
                 </div>
             </div>
         
